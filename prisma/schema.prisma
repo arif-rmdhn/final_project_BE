@@ -18,8 +18,7 @@ datasource db {
  * 11: Soil sensor
  * 22: SHT
  * CS GH BG ID => 11010101 => soil_11010101
- * CS GH 22 ID
- * SHT => 22012201 => SHT_22012201
+ * CS GH 22 ID => 22012201 => SHT_22012201
  * Sekali buat;
  */
 

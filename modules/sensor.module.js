@@ -6,9 +6,9 @@ class _sensor {
     createSensor = async (body) => {
         try {
             const schema = Joi.object({
-                id_sensor: Joi.number().require(),
-                sensor_name: Joi.string().require(),
-                description: Joi.string().require()
+                id_sensor: Joi.number().required(),
+                sensor_name: Joi.string().required(),
+                description: Joi.string().required()
             }).options({ abortEarly: false })
 
             validate(schema, body);
@@ -55,7 +55,7 @@ class _sensor {
         try {
             const destroy = await prisma.sensor.delete({
                 where: {
-                    id: perseInt(id)
+                    id: id
                 }
             })
 
@@ -76,9 +76,9 @@ class _sensor {
     updateSensor = async (body) => {
         try {
             const schema = Joi.object({
-                id_sensor: Joi.number().require(),
-                sensor_name: Joi.string().require(),
-                description: Joi.string().require()
+                id_sensor: Joi.number().required(),
+                sensor_name: Joi.string().required(),
+                description: Joi.string().required()
             }).options({ abortEarly: false })
 
             validate(schema, body);

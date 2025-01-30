@@ -45,7 +45,7 @@ class _sensorNow {
     createSensorData = async (body) => {
         try {
             const schema = Joi.object({
-                data_value: Joi.number().require(),
+                data_value: Joi.number().required(),
             }).options({ abortEarly: false })
 
             validate(schema, body);
@@ -73,7 +73,7 @@ class _sensorNow {
     sendData = async (body) => {
         try {
             const schema = Joi.object({
-                data_value: body.data_value
+                data_value: Joi.number().required()
             }).options({ abortEarly: false });
 
             validate(schema, body);

@@ -6,8 +6,8 @@ class _sensorData {
     addDataSensor = async (body) => {
         try {
             const schema = Joi.object({
-                sensor_id: Joi.number().require(),
-                data_value: Joi.number().require()
+                sensor_id: Joi.number().required(),
+                data_value: Joi.number().required()
             }).options({ abortEarly: false })
 
             validate(schema, body);
@@ -56,3 +56,5 @@ class _sensorData {
 
 
 }
+
+module.exports = new _sensorData();

@@ -13,7 +13,7 @@ const sensorController = Router()
 */
 
 sensorController.post("/create", async (req, res) => {
-    const add = await m$sensor.createSensor(req, body)
+    const add = await m$sensor.createSensor(req.body)
 
     response.sendResponse(res, add)
 })
@@ -42,3 +42,5 @@ sensorController.put("/update", async (req, res) => {
 
     response.sendResponse(res, update)
 })
+
+module.exports = sensorController;

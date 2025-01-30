@@ -12,42 +12,41 @@ const sensorNowController = Router()
 * https:localhost:8000/api/
 **/
 
-SensordataController.post("/add", async (req, res) => {
+sensorNowController.post("/add", async (req, res) => {
     const add = await m$now.createSensorData(req.body)
     response.sendResponse(res, add)
 })
 
-SensordataController.get("/alldata", async (req, res) => {
+sensorNowController.get("/alldata", async (req, res) => {
     const list = await m$now.listSensorData()
 
     response.sendResponse(res, list)
 })
 
-SensordataController.get("/getvalue/:id", async (req, res) => {
-    const get = await m$now.GetValue(req.params.id)
+sensorNowController.get("/getvalue/:id", async (req, res) => {
+    const get = await m$now.GetValue(Number(req.params.id))
 
     response.sendResponse(res, get)
 })
 
-/** Create new Regist sensor
+/**
 * @param  {Int} sensor_id
 * @param {Float} data_value
 * 
 * https:localhost:8000/api/
 **/
-SensordataController.put("/sendvalue", async (req, res) => {
+sensorNowController.put("/sendvalue", async (req, res) => {
     const add = await m$now.sendData(req.body)
-
     response.sendResponse(res, add)
 })
 
-SensordataController.delete("/delete/:id", async (req, res) => {
+sensorNowController.delete("/delete/:id", async (req, res) => {
     const del = await m$now.deleteList(req.params.id)
 
     response.sendResponse(res, del)
 })
 
-module.exports = sensorNowController
+module.exports = sensorNowController;
 
 
 

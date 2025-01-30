@@ -8,7 +8,11 @@ class _sensorNow {
             const detail = await prisma.sensor_now.findFirst({
                 where: {
                     sensor_id: id,
+                },
+                select: {
+                    data_value: true
                 }
+
             })
 
             return {
@@ -45,15 +49,37 @@ class _sensorNow {
     createSensorData = async (body) => {
         try {
             const schema = Joi.object({
-                data_value: Joi.number().required(),
+                sensor_id: Joi.number().required(),
+                data_value: Joi.number().required()
             }).options({ abortEarly: false })
 
             validate(schema, body);
 
+            const sen = await prisma.sensor.findFirst({
+                where: {
+                    id_sensor: body.sensor_id
+                },
+                select: {
+                    id_sensor: true
+                }
+            })
+
+            if (!sen) {
+                return {
+                    status: false,
+                    code: 401,
+                    error: 'Id_Sensor Not Found'
+                }
+            }
+
             const add = await prisma.sensor_now.create({
                 data: {
-                    sensor_id: body.sensor_id,
-                    data_value: body.data_value
+                    data_value: body.data_value,
+                    sensor: {
+                        connect: {
+                            id_sensor: sen.id_sensor
+                        }
+                    }
                 }
             });
 
@@ -73,26 +99,38 @@ class _sensorNow {
     sendData = async (body) => {
         try {
             const schema = Joi.object({
+                sensor_id: Joi.number().required(),
                 data_value: Joi.number().required()
             }).options({ abortEarly: false });
 
             validate(schema, body);
 
-            // const sensor = await prisma.sensor.findFirst({
-            //     where: {
-            //         id_sensor: body.id_sensor
-            //     }
-
-            // })
-
-            const update = await prisma.sensor_now.update({
+            const sen = await prisma.sensor.findFirst({
                 where: {
-                    sensor_id: body.id
+                    id_sensor: body.sensor_id
                 },
-                data: {
-                    data_value: body.data_value
+                select: {
+                    id_sensor: true
                 }
             })
+
+            if (!sen) {
+                return {
+                    status: false,
+                    code: 401,
+                    error: 'Id_Sensor Not Found'
+                }
+            }
+
+            const update = await prisma.sensor_now.updateMany({
+                where: {
+                    sensor_id: body.sensor_id
+                },
+                data: {
+                    data_value: body.data_value,
+                }
+            })
+
 
             return {
                 status: true,

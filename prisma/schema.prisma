@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * Code Sensor Desc:
+ * 11: Soil sensor
+ * 22: SHT
+ * CS GH BG ID => 11010101 => soil_11010101
+ * CS GH 22 ID
+ * SHT => 22012201 => SHT_22012201
+ * Sekali buat;
+ */
+
+model Sensor {
+  id          Int           @id @default(autoincrement())
+  id_sensor   Int           @unique
+  sensor_name String
+  description String
+  create_at   DateTime      @default(now())
+  update_at   DateTime      @updatedAt
+  data_sensor data_sensor[]
+  sensor_now  sensor_now[]
+}
+
+/**
+ * Save all data sensor: Create
+ */
+model data_sensor {
+  id          Int      @id @default(autoincrement())
+  sensor      Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
+  sensor_id   Int
+  data_value  Float
+  recorded_at DateTime @default(now())
+  update_at   DateTime @updatedAt
+}
+
+/**
+ */
+// Hanya Menerima QUERY PUT/UPDATE
+model sensor_now {
+  id         Int      @id @default(autoincrement())
+  sensor     Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
+  sensor_id  Int
+  data_value Float
+  update_at  DateTime @updatedAt
+}

@@ -13,6 +13,23 @@ class _sensor {
 
             validate(schema, body);
 
+            const sen = await prisma.sensor.findUnique({
+                where: {
+                    id_sensor: body.id_sensor
+                },
+                select: {
+                    id_sensor: true
+                }
+            })
+
+            if (sen) {
+                return {
+                    status: false,
+                    code: 401,
+                    error: 'Id_Sensor Availabel'
+                }
+            }
+
             const add = await prisma.sensor.create({
                 data: {
                     id_sensor: body.id_sensor,
@@ -51,11 +68,34 @@ class _sensor {
         }
     }
 
+    detailSensorSht = async (id) => {
+        try {
+            const listDetail = await prisma.sensor.findFirst({
+                where: {
+                    id_sensor: id
+                }, include: {
+                    data_sensor_sht: true
+                }
+            })
+
+            return {
+                status: true,
+                data: listDetail
+            }
+        } catch (error) {
+            console.error('listSensor sensor module Error: ', error);
+            return {
+                status: false,
+                error,
+            }
+        }
+    }
+
     destroySensor = async (id) => {
         try {
             const destroy = await prisma.sensor.delete({
                 where: {
-                    id: id
+                    id_sensor: id
                 }
             })
 
@@ -88,6 +128,7 @@ class _sensor {
                     id_sensor: body.id_sensor
                 },
                 data: {
+                    id_sensor: body.id_sensor,
                     sensor_name: body.sensor_name,
                     description: body.description
                 }

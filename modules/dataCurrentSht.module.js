@@ -2,17 +2,17 @@ const Joi = require("joi")
 const prisma = require("../helpers/database")
 const validate = require("../helpers/validation")
 
-class _sensorNow {
+class _currentSht {
     GetValue = async (id) => {
         try {
-            const detail = await prisma.sensor_now.findFirst({
+            const detail = await prisma.data_current_sht.findFirst({
                 where: {
                     sensor_id: id,
                 },
                 select: {
-                    data_value: true
+                    humadity: true,
+                    temperature: true
                 }
-
             })
 
             return {
@@ -21,7 +21,7 @@ class _sensorNow {
             }
 
         } catch (error) {
-            console.error('GetValue sensorData module Error: ', error);
+            console.error('GetValue dataCurrentSht module Error: ', error);
             return {
                 status: false,
                 error,
@@ -31,14 +31,14 @@ class _sensorNow {
 
     listSensorData = async () => {
         try {
-            const list = await prisma.sensor_now.findMany();
+            const list = await prisma.data_current_sht.findMany();
 
             return {
                 status: true,
                 data: list,
             }
         } catch (error) {
-            console.error('listSensorData sensorData module Error: ', error);
+            console.error('listSensorData dataCurrentSht module Error: ', error);
             return {
                 status: false,
                 error,
@@ -49,13 +49,12 @@ class _sensorNow {
     createSensorData = async (body) => {
         try {
             const schema = Joi.object({
-                sensor_id: Joi.number().required(),
-                data_value: Joi.number().required()
+                sensor_id: Joi.number().required()
             }).options({ abortEarly: false })
 
             validate(schema, body);
 
-            const sen = await prisma.sensor.findFirst({
+            const sen = await prisma.sensor.findUnique({
                 where: {
                     id_sensor: body.sensor_id
                 },
@@ -72,9 +71,28 @@ class _sensorNow {
                 }
             }
 
-            const add = await prisma.sensor_now.create({
+            const sen_ = await prisma.data_current_sht.findFirst({
+                where: {
+                    sensor_id: body.sensor_id
+                },
+                select: {
+                    sensor_id: true
+                }
+            })
+
+            if (sen_) {
+                return {
+                    status: false,
+                    code: 401,
+                    error: 'Sensor_id Availabel'
+                }
+            }
+
+
+            const add = await prisma.data_current_sht.create({
                 data: {
-                    data_value: body.data_value,
+                    humadity: 0,
+                    temperature: 0,
                     sensor: {
                         connect: {
                             id_sensor: sen.id_sensor
@@ -88,7 +106,7 @@ class _sensorNow {
                 data: add,
             };
         } catch (error) {
-            console.error('createSensorData sensorData module Error: ', error);
+            console.error('createSensorData dataCurrentSht module Error: ', error);
             return {
                 status: false,
                 error,
@@ -100,7 +118,8 @@ class _sensorNow {
         try {
             const schema = Joi.object({
                 sensor_id: Joi.number().required(),
-                data_value: Joi.number().required()
+                humadity: Joi.number().required(),
+                temperature: Joi.number().required()
             }).options({ abortEarly: false });
 
             validate(schema, body);
@@ -122,23 +141,22 @@ class _sensorNow {
                 }
             }
 
-            const update = await prisma.sensor_now.updateMany({
+            const update = await prisma.data_current_sht.updateMany({
                 where: {
                     sensor_id: body.sensor_id
                 },
                 data: {
-                    data_value: body.data_value,
+                    humadity: body.humadity,
+                    temperature: body.temperature
                 }
             })
-
-
             return {
                 status: true,
                 data: update,
             };
 
         } catch (error) {
-            console.error('sendData sensorData module Error: ', error);
+            console.error('sendData dataCurrentSht module Error: ', error);
             return {
                 status: false,
                 error,
@@ -148,15 +166,19 @@ class _sensorNow {
 
     deleteList = async (id) => {
         try {
-            const deleteList = await prisma.sensor_now.delete({
+            const deleteList = await prisma.data_current_sht.deleteMany({
                 where: {
-                    sensor_id: parseInt(id),
+                    sensor_id: id,
                 }
             })
 
+            return {
+                status: true,
+                data: deleteList,
+            };
 
         } catch (error) {
-            console.error('deleteList sensorData module Error: ', error);
+            console.error('deleteList dataCurrentSht module Error: ', error);
             return {
                 status: false,
                 error,
@@ -166,4 +188,4 @@ class _sensorNow {
 
 }
 
-module.exports = new _sensorNow();
+module.exports = new _currentSht();

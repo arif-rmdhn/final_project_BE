@@ -23,24 +23,40 @@ datasource db {
  */
 
 model Sensor {
-  id          Int           @id @default(autoincrement())
-  id_sensor   Int           @unique
-  sensor_name String
-  description String
-  create_at   DateTime      @default(now())
-  update_at   DateTime      @updatedAt
-  data_sensor data_sensor[]
-  sensor_now  sensor_now[]
+  id                Int                 @id @default(autoincrement())
+  id_sensor         Int                 @unique
+  sensor_name       String
+  description       String
+  create_at         DateTime            @default(now())
+  update_at         DateTime            @updatedAt
+  data_sensor_soil  sensor_soil[]
+  data_sensor_sht   sensor_sht[]
+  data_current_soil data_current_soil[]
+  data_current_sht  data_current_sht[]
 }
 
 /**
  * Save all data sensor: Create
  */
-model data_sensor {
+model sensor_soil {
+  id           Int      @id @default(autoincrement())
+  sensor       Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
+  sensor_id    Int      
+  humadity     Float
+  temperature  Float
+  conductivity Float
+  ph           Float
+  tds          Float
+  recorded_at  DateTime @default(now())
+  update_at    DateTime @updatedAt
+}
+
+model sensor_sht {
   id          Int      @id @default(autoincrement())
   sensor      Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
-  sensor_id   Int      @unique
-  data_value  Float
+  sensor_id   Int      
+  humadity    Float
+  temperature Float
   recorded_at DateTime @default(now())
   update_at   DateTime @updatedAt
 }
@@ -48,10 +64,23 @@ model data_sensor {
 /**
  */
 // Hanya Menerima QUERY PUT/UPDATE
-model sensor_now {
-  id         Int      @id @default(autoincrement())
-  sensor     Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
-  sensor_id  Int
-  data_value Float
-  update_at  DateTime @updatedAt
+model data_current_soil {
+  id           Int      @id @default(autoincrement())
+  sensor       Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
+  sensor_id    Int
+  humadity     Float
+  temperature  Float
+  conductivity Float
+  ph           Float
+  tds          Float
+  update_at    DateTime @updatedAt
+}
+
+model data_current_sht {
+  id          Int      @id @default(autoincrement())
+  sensor      Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
+  sensor_id   Int
+  humadity    Float
+  temperature Float
+  update_at   DateTime @updatedAt
 }

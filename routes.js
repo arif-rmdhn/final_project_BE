@@ -1,6 +1,6 @@
 const sensorController = require('./controllers/sensorController')
 const sensorDataController = require('./controllers/SensorDataController')
-const sensorNowController = require('./controllers/SensorNowController')
+const sensorNowController = require('./controllers/dataCurrentNowController')
 
 const _routes = [
     ['sensor', sensorController],

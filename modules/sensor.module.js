@@ -68,6 +68,54 @@ class _sensor {
         }
     }
 
+    detailData = async () => {
+        try {
+            const dataSoil = await prisma.data_current_soil.findMany({
+                select: {
+                    sensor_id: false,
+                    humadity: true,
+                    temperature: true,
+                    conductivity: true,
+                    ph: true,
+                    salinity: true,
+                    tds: true
+                }
+            });
+    
+            const dataSht = await prisma.data_current_sht.findMany({
+                select: {
+                    sensor_id: false,
+                    humadity: true,
+                    temperature: true
+                }
+            });
+    
+            // Tambahkan prefix dan simpan dalam array
+            const formattedSoil = dataSoil.map((obj, index) =>
+                Object.fromEntries(Object.entries(obj).map(([key, value]) => [`soil${index + 1}_${key}`, value]))
+            );
+    
+            const formattedSht = dataSht.map((obj, index) =>
+                Object.fromEntries(Object.entries(obj).map(([key, value]) => [`sht${index + 1}_${key}`, value]))
+            );
+    
+            // Gabungkan semua dalam satu objek
+            const mergedData = Object.assign({}, ...formattedSoil, ...formattedSht);
+    
+            return {
+                status: true,
+                ...mergedData
+            };
+        } catch (error) {
+            console.error('detailData sensor module Error: ', error);
+            return {
+                status: false,
+                error,
+            };
+        }
+    };
+        
+
     detailSensorSht = async (id) => {
         try {
             const listDetail = await prisma.sensor.findFirst({

@@ -1,11 +1,13 @@
 const sensorController = require('./controllers/sensorController')
 const sensorDataController = require('./controllers/SensorDataController')
 const sensorNowController = require('./controllers/dataCurrentNowController')
+const systemController = require('./controllers/systemController')
 
 const _routes = [
     ['sensor', sensorController],
     ['data', sensorDataController],
-    ['value', sensorNowController]
+    ['value', sensorNowController],
+    ['system', systemController]
 ]
 
 const routes = (app) => {

@@ -41,11 +41,12 @@ model Sensor {
 model sensor_soil {
   id           Int      @id @default(autoincrement())
   sensor       Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
-  sensor_id    Int      
+  sensor_id    Int
   humadity     Float
   temperature  Float
   conductivity Float
   ph           Float
+  salinity     Float
   tds          Float
   recorded_at  DateTime @default(now())
   update_at    DateTime @updatedAt
@@ -54,7 +55,7 @@ model sensor_soil {
 model sensor_sht {
   id          Int      @id @default(autoincrement())
   sensor      Sensor   @relation(fields: [sensor_id], references: [id_sensor], onUpdate: Cascade, onDelete: Cascade)
-  sensor_id   Int      
+  sensor_id   Int
   humadity    Float
   temperature Float
   recorded_at DateTime @default(now())
@@ -72,6 +73,7 @@ model data_current_soil {
   temperature  Float
   conductivity Float
   ph           Float
+  salinity     Float
   tds          Float
   update_at    DateTime @updatedAt
 }
@@ -82,5 +84,37 @@ model data_current_sht {
   sensor_id   Int
   humadity    Float
   temperature Float
+  update_at   DateTime @default(now()) @updatedAt
+}
+
+model status_system {
+  id          Int      @id @default(autoincrement())
+  stat        Int
+  recorded_at DateTime @default(now())
   update_at   DateTime @updatedAt
+}
+
+model weather_data {
+  id              Int    @id @unique
+  local_datetime  String
+  weather_desc    String
+  weather_desc_en String
+  t               Float
+  tcc             Float
+  hu              Float
+  image           String
+}
+
+model update_time_machine {
+  id     Int @id @unique
+  time_1 Int
+  time_2 Int
+  time_3 Int
+  time_4 Int
+}
+
+model duration_time_ {
+  id   Int    @id @unique
+  time Int
+  desc String
 }

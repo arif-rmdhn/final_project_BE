@@ -11,6 +11,7 @@ class _sensorSoil {
                 temperature: Joi.number().required(),
                 conductivity: Joi.number().required(),
                 ph: Joi.number().required(),
+                salinity: Joi.number().required(),
                 tds: Joi.number().required()
             }).options({ abortEarly: false })
 
@@ -36,6 +37,7 @@ class _sensorSoil {
                     temperature: body.temperature,
                     conductivity: body.conductivity,
                     ph: body.ph,
+                    salinity: body.salinity,
                     tds: body.tds,
                     sensor: {
                         connect: {

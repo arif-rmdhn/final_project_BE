@@ -14,6 +14,7 @@ class _dataCurrentSoil {
                     temperature: true,
                     conductivity: true,
                     ph: true,
+                    salinity: true,
                     tds: true
                 }
             })
@@ -97,6 +98,8 @@ class _dataCurrentSoil {
                     temperature: 0,
                     conductivity: 0,
                     ph: 0,
+                    salinity: 0,
+                    update_at: new Date(),
                     tds: 0,
                     sensor: {
                         connect: {
@@ -127,6 +130,7 @@ class _dataCurrentSoil {
                 temperature: Joi.number().required(),
                 conductivity: Joi.number().required(),
                 ph: Joi.number().required(),
+                salinity: Joi.number().required(),
                 tds: Joi.number().required()
             }).options({ abortEarly: false });
 
@@ -158,7 +162,8 @@ class _dataCurrentSoil {
                     temperature: body.temperature,
                     conductivity: body.conductivity,
                     ph: body.ph,
-                    tds: body.tds,
+                    salinity: body.salinity,
+                    tds: body.tds
                 }
             })
             return {

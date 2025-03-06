@@ -1,21 +1,15 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `Sensor` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_sensor` INTEGER NOT NULL,
+    `sensor_name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
+    `create_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `update_at` DATETIME(3) NOT NULL,
 
-  - You are about to drop the `data_sensor` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `sensor_now` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE `data_sensor` DROP FOREIGN KEY `data_sensor_sensor_id_fkey`;
-
--- DropForeignKey
-ALTER TABLE `sensor_now` DROP FOREIGN KEY `sensor_now_sensor_id_fkey`;
-
--- DropTable
-DROP TABLE `data_sensor`;
-
--- DropTable
-DROP TABLE `sensor_now`;
+    UNIQUE INDEX `Sensor_id_sensor_key`(`id_sensor`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `sensor_soil` (
@@ -25,9 +19,10 @@ CREATE TABLE `sensor_soil` (
     `temperature` DOUBLE NOT NULL,
     `conductivity` DOUBLE NOT NULL,
     `ph` DOUBLE NOT NULL,
+    `salinity` DOUBLE NOT NULL,
     `tds` DOUBLE NOT NULL,
     `recorded_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `update_at` DATETIME(3) NOT NULL,
+    `update_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -52,6 +47,7 @@ CREATE TABLE `data_current_soil` (
     `temperature` DOUBLE NOT NULL,
     `conductivity` DOUBLE NOT NULL,
     `ph` DOUBLE NOT NULL,
+    `salinity` DOUBLE NOT NULL,
     `tds` DOUBLE NOT NULL,
     `update_at` DATETIME(3) NOT NULL,
 
@@ -64,7 +60,7 @@ CREATE TABLE `data_current_sht` (
     `sensor_id` INTEGER NOT NULL,
     `humadity` DOUBLE NOT NULL,
     `temperature` DOUBLE NOT NULL,
-    `update_at` DATETIME(3) NOT NULL,
+    `update_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

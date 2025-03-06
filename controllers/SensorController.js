@@ -37,10 +37,16 @@ sensorController.delete("/delete/:id", async (req, res) => {
 * 
 * https:localhost:8000/api/
 */
+
 sensorController.put("/update", async (req, res) => {
     const update = await m$sensor.updateSensor(req, body)
 
     response.sendResponse(res, update)
+})
+
+sensorController.get("/datafuxa", async (req, res) => {
+    const fuxa = await m$sensor.detailData()
+    response.sendResponse(res, fuxa)
 })
 
 module.exports = sensorController;

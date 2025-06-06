@@ -29,7 +29,6 @@ sensorNowController.get("/sht/getvalue/:id", async (req, res) => {
 })
 
 /** Kirim data baru
-
 * 
 * https:localhost:8000/api/
 **/
@@ -62,7 +61,7 @@ sensorNowController.delete("/sht/delete/:id", async (req, res) => {
 
 sensorNowController.post("/soil/add", async (req, res) => {
     const add = await m$nowSoil.createSensorData(req.body)
-    response.sendResponse(res, add)
+    response.sendResponse(res, add) 
 })
 
 sensorNowController.get("/soil/alldata", async (req, res) => {

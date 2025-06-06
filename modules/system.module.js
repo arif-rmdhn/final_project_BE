@@ -19,7 +19,6 @@ class _system {
                 data: {
                     stat: body.stat
                 }
-
             })
 
             return {

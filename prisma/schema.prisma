@@ -94,27 +94,27 @@ model status_system {
   update_at   DateTime @updatedAt
 }
 
-model weather_data {
-  id              Int    @id @unique
-  local_datetime  String
-  weather_desc    String
-  weather_desc_en String
-  t               Float
-  tcc             Float
-  hu              Float
-  image           String
-}
+// model weather_data {
+//   id              Int    @id @unique
+//   local_datetime  String
+//   weather_desc    String
+//   weather_desc_en String
+//   t               Float
+//   tcc             Float
+//   hu              Float
+//   image           String
+// }
 
-model update_time_machine {
-  id     Int @id @unique
-  time_1 Int
-  time_2 Int
-  time_3 Int
-  time_4 Int
-}
+// model update_time_machine {
+//   id     Int @id @unique
+//   time_1 Int 
+//   time_2 Int 
+//   time_3 Int
+//   time_4 Int
+// }
 
-model duration_time_ {
-  id   Int    @id @unique
-  time Int
-  desc String
-}
+// model duration_time_ {
+//   id   Int    @id @unique
+//   time Int
+//   desc String
+// }

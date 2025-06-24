@@ -1,6 +1,7 @@
 const Joi = require("joi")
 const prisma = require("../helpers/database")
 const path = require('path')
+const fs = require('fs').promises;
 const validate = require("../helpers/validation")
 
 class _image {
@@ -27,36 +28,67 @@ class _image {
                 error,
             }
         }
-
     };
 
-    GetImg = async (id) => {
+    GetImg = async (req, id) => { // Tambahkan parameter req
         try {
-            const imageDir = path.join(__dirname, 'images')
-            const files = await fs.readdir(imageDir)
-            const matchingFiles = files.filter(file =>
-                file.startsWith(`${id}-`) &&
-                ['.jpg', '.jpeg', '.png'].some(ext => file.endsWith(ext))
-            );
-            if (matchingFiles.length === 0) {
-                return res.status(404).json({ status: false, error: 'Gambar tidak ditemukan' });
+            // Validasi format tanggal (YYYYMMDD)
+            if (!/^\d{8}$/.test(id)) {
+                return {
+                    status: false,
+                    code: 400,
+                    error: 'Format tanggal harus YYYYMMDD (contoh: 20230101)'
+                };
             }
-            const fileName = matchingFiles[0];
-            const filePath = path.join(imageDir, fileName);
 
-            // Set header dan kirim file
-            res.header('Content-Type', `image/${path.extname(fileName).substring(1)}`);
-            res.header('Content-Disposition', `inline; filename="${fileName}"`);
+            const imageDir = path.resolve(__dirname, '..', 'images');
 
-            fs.createReadStream(filePath).pipe(res);
+            // Cek apakah direktori ada
+            try {
+                await fs.access(imageDir);
+            } catch (error) {
+                return { status: false, error: 'Direktori gambar tidak ditemukan' };
+            }
+
+            const files = await fs.readdir(imageDir);
+
+            // Filter dan mapping file gambar
+            const images = files
+                .filter(file =>
+                    file.startsWith(`${id}-`) &&
+                    ['.jpg', '.jpeg', '.png'].includes(path.extname(file).toLowerCase())
+                )
+                .map(file => ({
+                    filename: file,
+                    url: `${req.protocol}://${req.get('host')}/images/${file}`
+                }));
+
+            if (images.length === 0) {
+                return {
+                    status: false,
+                    code: 404,
+                    error: 'Tidak ada gambar ditemukan untuk tanggal ini'
+                };
+            }
+
+            return {
+                status: true,
+                code: 200,
+                data: {
+                    date: id,
+                    images: images
+                }
+            };
+
         } catch (error) {
-            console.error('GetImages module Error: ', error);
+            console.error('GetImg module Error: ', error);
             return {
                 status: false,
-                error,
-            }
+                code: 500,
+                error: 'Internal Server Error'
+            };
         }
-    }
+    };
 }
 
 module.exports = new _image();

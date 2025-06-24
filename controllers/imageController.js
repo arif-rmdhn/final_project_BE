@@ -11,4 +11,11 @@ imagesController.post("/uploud", uploud.single('file'), async (req, res) => {
     response.sendResponse(res, up_img)
 })
 
+imagesController.get("/list/:id", async (req, res) => {
+    const data = await m$img.GetImg(req, req.params.id)
+
+    response.sendResponse(res, data)
+
+})
+
 module.exports = imagesController;

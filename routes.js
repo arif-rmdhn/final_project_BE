@@ -2,18 +2,20 @@ const sensorController = require('./controllers/sensorController')
 const sensorDataController = require('./controllers/SensorDataController')
 const sensorNowController = require('./controllers/dataCurrentNowController')
 const systemController = require('./controllers/systemController')
+const imagesController = require('./controllers/imageController')
 
 const _routes = [
     ['sensor', sensorController],
     ['data', sensorDataController],
     ['value', sensorNowController],
-    ['system', systemController]
+    ['system', systemController],
+    ['image', imagesController]
 ]
 
 const routes = (app) => {
     _routes.forEach(route => {
         const [url, controller] = route
-        app.use(`/api/${url}`,controller)
+        app.use(`/api/${url}`, controller)
     })
 }
 

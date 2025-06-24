@@ -94,6 +94,13 @@ model status_system {
   update_at   DateTime @updatedAt
 }
 
+model image_data {
+  id         Int      @id @default(autoincrement())
+  name_img   String
+  url        String   @unique
+  created_at DateTime @default(now())
+}
+
 // model weather_data {
 //   id              Int    @id @unique
 //   local_datetime  String

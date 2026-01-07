@@ -96,9 +96,21 @@ model status_system {
 
 model image_data {
   id         Int      @id @default(autoincrement())
-  name_img   String
+  name_img   String   @unique
   url        String   @unique
   created_at DateTime @default(now())
+}
+
+// Alat Rekomendasi pemupukan otomatis
+model AetherSoil {
+  Timestamp   DateTime @id @default(now())
+  Temperature Float
+  Humidity    Float
+  Ph          Float
+  EC          Float
+  Nitrogen    Float
+  Potassium   Float
+  Kalium      Float
 }
 
 // model weather_data {
@@ -124,4 +136,12 @@ model image_data {
 //   id   Int    @id @unique
 //   time Int
 //   desc String
+// }
+
+// model SensorBmkg {
+//   id          Int      @id @default(autoincrement())
+//   temperature Float
+//   humadity    Float
+//   source_time DateTime
+//   recorded_at DateTime @default(now())
 // }

@@ -1,0 +1,14 @@
+AetherSoil New Database:
+-> GET
+-> POST
+-> UPDATE = data terbaru
+
+
+Timestamp
+Temperature
+Humidity
+Ph
+EC
+Nitrogen
+Potassium
+Kalium

@@ -12,7 +12,7 @@ const generateTimestampName = (file) => {
     const seconds = String(date.getSeconds()).padStart(2, '0');
     const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
 
-    return `${year}${month}${day}-${hours}${minutes}${seconds}-${milliseconds}${path.extname(file.originalname)}`;
+    return `${day}${month}${year}-${hours}${minutes}${seconds}-${milliseconds}${path.extname(file.originalname)}`;
 };
 
 const storage = multer.diskStorage({
@@ -25,13 +25,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    limits: { fileSize: 5 * 1024 * 1024 }, // Maks 5MB
     fileFilter: (req, file, cb) => {
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        if (allowedTypes.includes(file.mimetype)) {
+        const ext = path.extname(file.originalname).toLowerCase();
+        const allowedExt = ['.jpg', '.jpeg', '.png'];
+
+        // Cek MIME dan ekstensi
+        if (file.mimetype.startsWith('image/') && allowedExt.includes(ext)) {
             cb(null, true);
         } else {
-            cb(new Error('Format gambar tidak didukung'), false);
+            cb(new Error('Format gambar tidak didukung. Gunakan JPG atau PNG.'), false);
         }
     }
 });

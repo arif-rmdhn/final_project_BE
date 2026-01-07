@@ -1,7 +1,7 @@
 const Joi = require("joi")
 const prisma = require("../helpers/database")
 const path = require('path')
-const fs = require('fs').promises;
+const fs = require('fs');
 const validate = require("../helpers/validation")
 
 class _image {
@@ -27,6 +27,56 @@ class _image {
                 status: false,
                 error,
             }
+        }
+    };
+
+    DeleteImage = async (body) => {
+        try {
+            const { filename } = body;
+
+            //Cek apakah data gambar ada di database
+            const image = await prisma.image_data.findFirst({
+                select: {
+                    name_img: true,
+                },
+                where: {
+                    name_img: `${filename}`
+                },
+            });
+
+            if (!image) {
+                return {
+                    status: false,
+                    message: 'Gambar tidak ditemukan di database',
+                };
+            }
+
+            //Hapus file dari folder /images
+            const imagePath = path.join(__dirname, '../images', filename);
+
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // hapus file fisik
+            } else {
+                console.warn('File tidak ditemukan di folder:', imagePath);
+            }
+
+            //Hapus data dari database
+            await prisma.image_data.delete({
+                where: {
+                    name_img: `${filename}`
+                }
+            });
+
+            return {
+                status: true,
+                message: 'Gambar berhasil dihapus',
+            };
+        } catch (error) {
+            console.error('Delete image error:', error);
+            return {
+                status: false,
+                error,
+            };
         }
     };
 
@@ -89,6 +139,8 @@ class _image {
             };
         }
     };
+
+
 }
 
 module.exports = new _image();

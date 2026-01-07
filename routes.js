@@ -3,13 +3,17 @@ const sensorDataController = require('./controllers/SensorDataController')
 const sensorNowController = require('./controllers/dataCurrentNowController')
 const systemController = require('./controllers/systemController')
 const imagesController = require('./controllers/imageController')
+const AetherSoilController = require('./controllers/AetherSoilController')  
+
+
 
 const _routes = [
     ['sensor', sensorController],
     ['data', sensorDataController],
     ['value', sensorNowController],
     ['system', systemController],
-    ['image', imagesController]
+    ['image', imagesController],
+    ['aethersoil', AetherSoilController],
 ]
 
 const routes = (app) => {

@@ -5,6 +5,15 @@ const uploud = require("../helpers/images")
 
 const imagesController = Router()
 
+
+/* Uploud Image
+Formate body request:
+{
+
+  "file": "contoh.jpg"}
+
+*/
+
 imagesController.post("/uploud", uploud.single('file'), async (req, res) => {
     const up_img = await m$img.UploudImage(req.file)
 
@@ -17,5 +26,19 @@ imagesController.get("/list/:id", async (req, res) => {
     response.sendResponse(res, data)
 
 })
+
+/* Delete Image
+
+Formate body request:
+{
+  "filename": "contoh.jpg"
+}
+
+
+*/
+imagesController.delete('/delete-image', async (req, res) => {
+    const result = await m$img.DeleteImage(req.body);
+    res.json(result);
+});
 
 module.exports = imagesController;

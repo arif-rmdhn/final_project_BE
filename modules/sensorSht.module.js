@@ -77,6 +77,32 @@ class _sensorSht {
         }
     }
 
+    // Mendapatkan nilai suhu dari sensor tertentu berdasarkan ID sensor
+    get_temp_value = async (id) => {
+        try {
+            const listSensor = await prisma.sensor_sht.findMany({
+                where: {
+                    sensor_id: id
+                },
+                select: {
+                    temperature: true
+                }
+            })
+
+            return {
+                status: true,
+                data: listSensor
+            }
+        } catch (error) {
+            console.error('get_temp_value sensorSht module Error: ', error);
+            return {
+                status: false,
+                error,
+            }
+        }
+    }
+
+
     destroAll = async (id) => {
         try {
             const destroy = await prisma.sensor_sht.deleteMany({
